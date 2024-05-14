@@ -67,6 +67,7 @@
             pictureBoxTicTacToe.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxTicTacToe.TabIndex = 3;
             pictureBoxTicTacToe.TabStop = false;
+            pictureBoxTicTacToe.Click += pictureBoxTicTacToe_Click;
             // 
             // MainForm
             // 
