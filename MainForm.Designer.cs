@@ -45,6 +45,7 @@
             pictureBox2048.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox2048.TabIndex = 0;
             pictureBox2048.TabStop = false;
+            pictureBox2048.Click += pictureBox2048_Click;
             // 
             // chooseLabel
             // 

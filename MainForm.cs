@@ -19,5 +19,13 @@ namespace KrypLauncher
             InitializeComponent();
             this.loginUser = loginUser;
         }
+
+        private void pictureBox2048_Click(object sender, EventArgs e)
+        {
+            Options2048Form options2048Form = new Options2048Form();
+            this.Hide();
+            options2048Form.Show();
+            
+        }
     }
 }
