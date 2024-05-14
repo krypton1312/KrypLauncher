@@ -50,7 +50,7 @@
             LoginTextBox.CausesValidation = false;
             LoginTextBox.Location = new Point(105, 60);
             LoginTextBox.Name = "LoginTextBox";
-            LoginTextBox.PlaceholderText = "example@example.com";
+            LoginTextBox.PlaceholderText = "Логин";
             LoginTextBox.Size = new Size(186, 23);
             LoginTextBox.TabIndex = 1;
             LoginTextBox.TabStop = false;
@@ -73,6 +73,7 @@
             GeneragePasswordLabel.TabIndex = 3;
             GeneragePasswordLabel.TabStop = true;
             GeneragePasswordLabel.Text = "Сгенерировать пароль";
+            GeneragePasswordLabel.LinkClicked += GeneragePasswordLabel_LinkClicked;
             // 
             // LoginButton
             // 
