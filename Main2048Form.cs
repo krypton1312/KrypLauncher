@@ -39,7 +39,7 @@ namespace KrypLauncher
         private Size tileSize = new Size(60, 60);
         private Size normalFormSize = new Size(323, 466);
         private Dictionary<int, Color> colors;    // Цвета плиток
-        private Dictionary<String, int> records;  // Рекорды для каждого размера поля
+        Dictionary<string, int> records = new Dictionary<string, int>();        // Рекорды для каждого размера поля
 
         public Main2048Form()
         {
@@ -383,53 +383,69 @@ namespace KrypLauncher
         {
             try
             {
-                using (BinaryReader br = new BinaryReader(new FileStream("record.2048", FileMode.OpenOrCreate)))
+                // Открываем соединение с базой данных
+                db.openConnection();
+
+                // Создаем SQL-запрос для выбора записи из таблицы scores
+                string selectQuery = "SELECT `twentyfor` FROM `users` WHERE `login` = @loginUser";
+
+                // Создаем команду для выполнения запроса
+                MySqlCommand command = new MySqlCommand(selectQuery, db.getConnection());
+                command.Parameters.AddWithValue("@loginUser", loginUser);
+
+                // Выполняем запрос и получаем результат
+                object result = command.ExecuteScalar();
+
+                // Проверяем, получили ли мы результат
+                if (result != null)
                 {
-                    records = new Dictionary<String, int>();
-                    int count = br.ReadInt32();
-                    String key;
-                    for (int i = 0; i < count; i++)
-                    {
-                        key = br.ReadString();
-                        records[key] = br.ReadInt32();
-                    }
-                    if (records.ContainsKey(matrixRows + " " + matrixCells))
-                        bestScore = records[matrixRows + " " + matrixCells];
-                    else
-                        bestScore = 0;
+                    // Преобразуем результат в строку и парсим его в целое число
+                    bestScore = Convert.ToInt32(result);
                 }
-                ShowBestScore();
+                else
+                {
+                    // Если результат пустой, устанавливаем лучший счет в 0
+                    bestScore = 5;
+                }
+                ShowBestScore(); // Обновляем отображение лучшего счета
             }
-            catch (IOException)
+            catch (Exception ex)
             {
-                MessageBox.Show("Помилка читання файлу!", "Error");
+                MessageBox.Show("Ошибка чтения из базы данных: " + ex.Message, "Ошибка");
             }
-            catch
+            finally
             {
-                MessageBox.Show("Помилка!", "Error");
+                // В любом случае закрываем соединение с базой данных
+                db.closeConnection();
             }
         }
         private void WriteRecords()
         {
             try
             {
-                using (BinaryWriter bw = new BinaryWriter(new FileStream("record.2048", FileMode.Create)))
-                {
-                    bw.Write(records.Count);
-                    foreach (KeyValuePair<String, int> element in records)
-                    {
-                        bw.Write(element.Key);
-                        bw.Write(element.Value);
-                    }
-                }
+                // Открываем соединение с базой данных
+                db.openConnection();
+
+                // Создаем SQL-запрос для обновления или вставки записи в таблицу scores
+                string updateQuery = "INSERT INTO `users` (login, twentyfor) VALUES (@loginUser, @bestScore) " +
+                                    "ON DUPLICATE KEY UPDATE `twentyfor` = @bestScore";
+
+                // Создаем команду для выполнения запроса
+                MySqlCommand command = new MySqlCommand(updateQuery, db.getConnection());
+                command.Parameters.AddWithValue("@loginUser", loginUser);
+                command.Parameters.AddWithValue("@bestScore", bestScore);
+
+                // Выполняем запрос
+                command.ExecuteNonQuery();
             }
-            catch (IOException)
+            catch (Exception ex)
             {
-                MessageBox.Show("Помилка читання файлу!", "Error");
+                MessageBox.Show("Ошибка записи в базу данных: " + ex.Message, "Ошибка");
             }
-            catch
+            finally
             {
-                MessageBox.Show("Помилка!", "Error");
+                // В любом случае закрываем соединение с базой данных
+                db.closeConnection();
             }
         }
         private void WriteSettings()

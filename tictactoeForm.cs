@@ -1,7 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,21 +11,21 @@ namespace KrypLauncher
 {
     public partial class tictactoeForm : Form
     {
-        DB db = new DB();
+        private string loginUser;
         public tictactoeForm(string loginUser)
         {
             InitializeComponent();
+            this.loginUser = loginUser;
             WinsLabel.Text = "Ваши победы: " + resultUpdate(3);
             CompWinsLabel.Text = "Победы ИИ: " + resultUpdate(4);
         }
-        string loginUser;
         Player currentPlayer;
         public enum Player
         {
             X,
             O
         }
-        private void Form1_Load(object sender, EventArgs e)
+        public void Form1_Load(object sender, EventArgs e)
         {
             Default();
         }
@@ -39,8 +41,55 @@ namespace KrypLauncher
                 moves++;
             }
         }
+        public int resultUpdate(int action)
+        {
+
+            db.openConnection();
+            MySqlCommand getwins = new MySqlCommand("SELECT tictactoewins from `users` WHERE `login` = @uL ", db.getConnection());
+            MySqlCommand getlose = new MySqlCommand("SELECT tictactoelose from `users` WHERE `login` = @uL ", db.getConnection());
+            getwins.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
+            getlose.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
+            switch (action)
+            {
+                case 1:
+                    int tictactoeWinsCount = Convert.ToInt32(getwins.ExecuteScalar());
+                    tictactoeWinsCount++;
+                    WinsLabel.Text = "Ваши победы: " + tictactoeWinsCount;
+                    MySqlCommand updatewins = new MySqlCommand("UPDATE `users` SET `tictactoewins` = @newValue WHERE `login` = @uL", db.getConnection());
+                    updatewins.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
+                    updatewins.Parameters.AddWithValue("@newValue", tictactoeWinsCount);
+                    updatewins.ExecuteNonQuery();
+                    MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                    db.closeConnection();
+                    return tictactoeWinsCount;
+                case 2:
+                    int tictactoeLoseCount = Convert.ToInt32(getlose.ExecuteScalar());
+                    tictactoeLoseCount++;
+                    CompWinsLabel.Text = "Победы ИИ: " + tictactoeLoseCount;
+                    MySqlCommand updatelose = new MySqlCommand("UPDATE `users` SET `tictactoelose` = @newValue WHERE `login` = @uL", db.getConnection());
+                    updatelose.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
+                    updatelose.Parameters.AddWithValue("@newValue", tictactoeLoseCount);
+                    updatelose.ExecuteNonQuery();
+                    MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                    db.closeConnection();
+                    return tictactoeLoseCount;
+                case 3:
+                    tictactoeWinsCount = Convert.ToInt32(getwins.ExecuteScalar());
+                    Console.WriteLine(3);
+                    db.closeConnection();
+                    return tictactoeWinsCount;
+                case 4:
+                    tictactoeLoseCount = Convert.ToInt32(getlose.ExecuteScalar());
+                    Console.WriteLine(4);
+                    db.closeConnection();
+                    return tictactoeLoseCount;
+            }
+
+            return 0;
+        }
 
         int moves = 0;
+        DB db = new();
 
         void CheckMoves(int a)
         {
@@ -94,7 +143,6 @@ namespace KrypLauncher
         }
         bool CheckWin_AI()
         {
-
             if (button4.Text == "O" && button5.Text == "O" && button6.Text == "O")
             {
                 button4.BackColor = Color.Red;
@@ -1898,43 +1946,6 @@ namespace KrypLauncher
                 }
             }
             Start();
-        }
-        int resultUpdate(int action)
-        {
-            db.openConnection();
-            MySqlCommand getwins = new MySqlCommand("SELECT tictactoewins from `users` WHERE `login` = @uL ", db.getConnection());
-            MySqlCommand getlose = new MySqlCommand("SELECT tictactoelose from `users` WHERE `login` = @uL ", db.getConnection());
-            getwins.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
-            getlose.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
-            switch (action)
-            {
-                case 1:
-                    int tictactoeWinsCount = Convert.ToInt32(getwins.ExecuteScalar());
-                    tictactoeWinsCount++;
-                    WinsLabel.Text = "Ваши победы: " + tictactoeWinsCount;
-                    MySqlCommand updatewins = new MySqlCommand("UPDATE `users` SET tictactoewins = @newValue WHERE `login` = @uL");
-                    updatewins.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
-                    updatewins.Parameters.AddWithValue("@newValue", tictactoeWinsCount);
-                    MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
-                    return tictactoeWinsCount;
-                case 2:
-                    int tictactoeLoseCount = Convert.ToInt32(getlose.ExecuteScalar());
-                    tictactoeLoseCount++;
-                    CompWinsLabel.Text = "Победы ИИ: " + tictactoeLoseCount;
-                    MySqlCommand updatelose = new MySqlCommand("UPDATE `users` SET tictactoelose = @newValue WHERE `login` = @uL");
-                    updatelose.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
-                    updatelose.Parameters.AddWithValue("@newValue", tictactoeLoseCount);
-                    MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
-                    return tictactoeLoseCount;
-                case 3:
-                    tictactoeWinsCount = Convert.ToInt32(getwins.ExecuteScalar());
-                    return tictactoeWinsCount;
-                case 4:
-                    tictactoeLoseCount = Convert.ToInt32(getlose.ExecuteScalar());
-                    return tictactoeLoseCount;
-            }
-            db.closeConnection();
-            return 0;
         }
 
         private void tictactoeForm_FormClosed(object sender, FormClosedEventArgs e)
