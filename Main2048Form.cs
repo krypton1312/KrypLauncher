@@ -9,13 +9,16 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using G_2048 = Game_2048._2048;
+using MySql.Data.MySqlClient;
 
 namespace KrypLauncher
 {
     public delegate void OptionsEventHandler();
+  
 
     public partial class Main2048Form : Form
     {
+        DB db = new DB();   
         public event OptionsEventHandler OptionsEvent;
 
         string loginUser;
@@ -74,6 +77,11 @@ namespace KrypLauncher
 
             ClientSize = new Size(newFormSize.Width, newFormSize.Height);
             pMatrix.Location = new Point(pField.Size.Width / 2 - pMatrix.Size.Width / 2, pField.Size.Height / 2 - pMatrix.Size.Height / 2);
+        }
+
+        public Main2048Form(string loginUser)
+        {
+            this.loginUser = loginUser;
         }
 
         #region Methods
@@ -413,30 +421,6 @@ namespace KrypLauncher
                         bw.Write(element.Key);
                         bw.Write(element.Value);
                     }
-                }
-            }
-            catch (IOException)
-            {
-                MessageBox.Show("Помилка читання файлу!", "Error");
-            }
-            catch
-            {
-                MessageBox.Show("Помилка!", "Error");
-            }
-        }
-        private void ReadSettings()
-        {
-            try
-            {
-                using (BinaryReader br = new BinaryReader(new FileStream("colors.2048", FileMode.OpenOrCreate)))
-                {
-                    matrixRows = br.ReadInt32();
-                    matrixCells = br.ReadInt32();
-                    int size = br.ReadInt32();
-                    tileSize = new Size(size, size);
-                    intervalBetweenTiles = br.ReadInt32();
-                    borderInterval = br.ReadInt32();
-                    ellipseTile = br.ReadBoolean();
                 }
             }
             catch (IOException)

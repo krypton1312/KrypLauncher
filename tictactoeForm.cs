@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,10 +9,14 @@ namespace KrypLauncher
 {
     public partial class tictactoeForm : Form
     {
-        public tictactoeForm()
+        DB db = new DB();
+        public tictactoeForm(string loginUser)
         {
             InitializeComponent();
+            WinsLabel.Text = "Ваши победы: " + resultUpdate(3);
+            CompWinsLabel.Text = "Победы ИИ: " + resultUpdate(4);
         }
+        string loginUser;
         Player currentPlayer;
         public enum Player
         {
@@ -94,7 +100,7 @@ namespace KrypLauncher
                 button4.BackColor = Color.Red;
                 button5.BackColor = Color.Red;
                 button6.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button6.Text == "O" && button8.Text == "O" && button10.Text == "O")
@@ -102,7 +108,7 @@ namespace KrypLauncher
                 button6.BackColor = Color.Red;
                 button8.BackColor = Color.Red;
                 button10.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button7.Text == "O" && button8.Text == "O" && button9.Text == "O")
@@ -110,7 +116,7 @@ namespace KrypLauncher
                 button7.BackColor = Color.Red;
                 button8.BackColor = Color.Red;
                 button9.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button4.Text == "O" && button7.Text == "O" && button10.Text == "O")
@@ -118,7 +124,7 @@ namespace KrypLauncher
                 button4.BackColor = Color.Red;
                 button7.BackColor = Color.Red;
                 button10.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button5.Text == "O" && button8.Text == "O" && button11.Text == "O")
@@ -126,7 +132,7 @@ namespace KrypLauncher
                 button5.BackColor = Color.Red;
                 button8.BackColor = Color.Red;
                 button11.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button6.Text == "O" && button9.Text == "O" && button12.Text == "O")
@@ -134,7 +140,7 @@ namespace KrypLauncher
                 button6.BackColor = Color.Red;
                 button9.BackColor = Color.Red;
                 button12.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button4.Text == "O" && button8.Text == "O" && button12.Text == "O")
@@ -142,7 +148,7 @@ namespace KrypLauncher
                 button4.BackColor = Color.Red;
                 button8.BackColor = Color.Red;
                 button12.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button13.Text == "O" && button14.Text == "O" && button15.Text == "O")
@@ -150,7 +156,7 @@ namespace KrypLauncher
                 button13.BackColor = Color.Red;
                 button14.BackColor = Color.Red;
                 button15.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button1.Text == "O" && button4.Text == "O" && button7.Text == "O")
@@ -158,7 +164,7 @@ namespace KrypLauncher
                 button1.BackColor = Color.Red;
                 button4.BackColor = Color.Red;
                 button7.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button2.Text == "O" && button5.Text == "O" && button8.Text == "O")
@@ -166,7 +172,7 @@ namespace KrypLauncher
                 button2.BackColor = Color.Red;
                 button5.BackColor = Color.Red;
                 button8.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button3.Text == "O" && button6.Text == "O" && button9.Text == "O")
@@ -174,7 +180,7 @@ namespace KrypLauncher
                 button3.BackColor = Color.Red;
                 button6.BackColor = Color.Red;
                 button9.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button1.Text == "O" && button5.Text == "O" && button9.Text == "O")
@@ -182,7 +188,7 @@ namespace KrypLauncher
                 button1.BackColor = Color.Red;
                 button5.BackColor = Color.Red;
                 button9.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button3.Text == "O" && button5.Text == "O" && button7.Text == "O")
@@ -190,7 +196,7 @@ namespace KrypLauncher
                 button3.BackColor = Color.Red;
                 button5.BackColor = Color.Red;
                 button7.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button7.Text == "O" && button10.Text == "O" && button13.Text == "O")
@@ -198,7 +204,7 @@ namespace KrypLauncher
                 button7.BackColor = Color.Red;
                 button10.BackColor = Color.Red;
                 button13.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button9.Text == "O" && button12.Text == "O" && button15.Text == "O")
@@ -206,7 +212,7 @@ namespace KrypLauncher
                 button9.BackColor = Color.Red;
                 button12.BackColor = Color.Red;
                 button15.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button7.Text == "O" && button10.Text == "O" && button13.Text == "O")
@@ -214,7 +220,7 @@ namespace KrypLauncher
                 button7.BackColor = Color.Red;
                 button10.BackColor = Color.Red;
                 button13.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button9.Text == "O" && button11.Text == "O" && button13.Text == "O")
@@ -222,7 +228,7 @@ namespace KrypLauncher
                 button9.BackColor = Color.Red;
                 button11.BackColor = Color.Red;
                 button13.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else if (button10.Text == "O" && button11.Text == "O" && button12.Text == "O")
@@ -230,7 +236,7 @@ namespace KrypLauncher
                 button10.BackColor = Color.Red;
                 button11.BackColor = Color.Red;
                 button12.BackColor = Color.Red;
-                MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(2);
                 return false;
             }
             else
@@ -245,7 +251,7 @@ namespace KrypLauncher
                 button4.BackColor = Color.Green;
                 button5.BackColor = Color.Green;
                 button6.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button6.Text == "X" && button8.Text == "X" && button10.Text == "X")
@@ -253,7 +259,7 @@ namespace KrypLauncher
                 button6.BackColor = Color.Green;
                 button8.BackColor = Color.Green;
                 button10.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button10.Text == "X" && button11.Text == "X" && button12.Text == "X")
@@ -261,7 +267,7 @@ namespace KrypLauncher
                 button10.BackColor = Color.Green;
                 button11.BackColor = Color.Green;
                 button12.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button7.Text == "X" && button8.Text == "X" && button9.Text == "X")
@@ -269,7 +275,7 @@ namespace KrypLauncher
                 button7.BackColor = Color.Green;
                 button8.BackColor = Color.Green;
                 button9.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button4.Text == "X" && button7.Text == "X" && button10.Text == "X")
@@ -277,7 +283,7 @@ namespace KrypLauncher
                 button4.BackColor = Color.Green;
                 button7.BackColor = Color.Green;
                 button10.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button5.Text == "X" && button8.Text == "X" && button11.Text == "X")
@@ -285,7 +291,7 @@ namespace KrypLauncher
                 button5.BackColor = Color.Green;
                 button8.BackColor = Color.Green;
                 button11.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button6.Text == "X" && button9.Text == "X" && button12.Text == "X")
@@ -293,7 +299,7 @@ namespace KrypLauncher
                 button6.BackColor = Color.Green;
                 button9.BackColor = Color.Green;
                 button12.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button4.Text == "X" && button8.Text == "X" && button12.Text == "X")
@@ -301,7 +307,7 @@ namespace KrypLauncher
                 button4.BackColor = Color.Green;
                 button8.BackColor = Color.Green;
                 button12.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button13.Text == "X" && button14.Text == "X" && button15.Text == "X")
@@ -309,7 +315,7 @@ namespace KrypLauncher
                 button13.BackColor = Color.Green;
                 button14.BackColor = Color.Green;
                 button15.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button1.Text == "X" && button4.Text == "X" && button7.Text == "X")
@@ -317,7 +323,7 @@ namespace KrypLauncher
                 button13.BackColor = Color.Green;
                 button14.BackColor = Color.Green;
                 button15.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button2.Text == "X" && button5.Text == "X" && button8.Text == "X")
@@ -325,7 +331,7 @@ namespace KrypLauncher
                 button2.BackColor = Color.Green;
                 button5.BackColor = Color.Green;
                 button8.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button3.Text == "X" && button6.Text == "X" && button9.Text == "X")
@@ -333,7 +339,7 @@ namespace KrypLauncher
                 button3.BackColor = Color.Green;
                 button6.BackColor = Color.Green;
                 button9.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button1.Text == "X" && button5.Text == "X" && button9.Text == "X")
@@ -341,7 +347,7 @@ namespace KrypLauncher
                 button1.BackColor = Color.Green;
                 button5.BackColor = Color.Green;
                 button9.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button3.Text == "X" && button5.Text == "X" && button7.Text == "X")
@@ -349,7 +355,7 @@ namespace KrypLauncher
                 button3.BackColor = Color.Green;
                 button5.BackColor = Color.Green;
                 button7.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button7.Text == "X" && button10.Text == "X" && button13.Text == "X")
@@ -357,7 +363,7 @@ namespace KrypLauncher
                 button7.BackColor = Color.Green;
                 button10.BackColor = Color.Green;
                 button13.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button9.Text == "X" && button12.Text == "X" && button15.Text == "X")
@@ -365,7 +371,7 @@ namespace KrypLauncher
                 button9.BackColor = Color.Green;
                 button12.BackColor = Color.Green;
                 button15.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button7.Text == "X" && button10.Text == "X" && button13.Text == "X")
@@ -373,7 +379,7 @@ namespace KrypLauncher
                 button7.BackColor = Color.Green;
                 button10.BackColor = Color.Green;
                 button13.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else if (button9.Text == "X" && button11.Text == "X" && button13.Text == "X")
@@ -381,7 +387,7 @@ namespace KrypLauncher
                 button9.BackColor = Color.Green;
                 button11.BackColor = Color.Green;
                 button13.BackColor = Color.Green;
-                MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                resultUpdate(1);
                 return false;
             }
             else
@@ -1892,6 +1898,49 @@ namespace KrypLauncher
                 }
             }
             Start();
+        }
+        int resultUpdate(int action)
+        {
+            db.openConnection();
+            MySqlCommand getwins = new MySqlCommand("SELECT tictactoewins from `users` WHERE `login` = @uL ", db.getConnection());
+            MySqlCommand getlose = new MySqlCommand("SELECT tictactoelose from `users` WHERE `login` = @uL ", db.getConnection());
+            getwins.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
+            getlose.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
+            switch (action)
+            {
+                case 1:
+                    int tictactoeWinsCount = Convert.ToInt32(getwins.ExecuteScalar());
+                    tictactoeWinsCount++;
+                    WinsLabel.Text = "Ваши победы: " + tictactoeWinsCount;
+                    MySqlCommand updatewins = new MySqlCommand("UPDATE `users` SET tictactoewins = @newValue WHERE `login` = @uL");
+                    updatewins.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
+                    updatewins.Parameters.AddWithValue("@newValue", tictactoeWinsCount);
+                    MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                    return tictactoeWinsCount;
+                case 2:
+                    int tictactoeLoseCount = Convert.ToInt32(getlose.ExecuteScalar());
+                    tictactoeLoseCount++;
+                    CompWinsLabel.Text = "Победы ИИ: " + tictactoeLoseCount;
+                    MySqlCommand updatelose = new MySqlCommand("UPDATE `users` SET tictactoelose = @newValue WHERE `login` = @uL");
+                    updatelose.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
+                    updatelose.Parameters.AddWithValue("@newValue", tictactoeLoseCount);
+                    MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                    return tictactoeLoseCount;
+                case 3:
+                    tictactoeWinsCount = Convert.ToInt32(getwins.ExecuteScalar());
+                    return tictactoeWinsCount;
+                case 4:
+                    tictactoeLoseCount = Convert.ToInt32(getlose.ExecuteScalar());
+                    return tictactoeLoseCount;
+            }
+            db.closeConnection();
+            return 0;
+        }
+
+        private void tictactoeForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            MainForm mainForm = new MainForm(loginUser);
+            mainForm.Show();
         }
     }
 }

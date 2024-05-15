@@ -79,6 +79,7 @@
             Controls.Add(pictureBox2048);
             Name = "MainForm";
             Text = "KrypLauncher";
+            FormClosed += MainForm_FormClosed;
             ((System.ComponentModel.ISupportInitialize)pictureBox2048).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxTicTacToe).EndInit();
             ResumeLayout(false);

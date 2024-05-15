@@ -47,6 +47,8 @@
             LableMoves = new Label();
             restBut = new Button();
             startbut = new Button();
+            WinsLabel = new Label();
+            CompWinsLabel = new Label();
             SuspendLayout();
             // 
             // button1
@@ -261,11 +263,33 @@
             startbut.UseVisualStyleBackColor = true;
             startbut.Click += startbut_Click;
             // 
+            // WinsLabel
+            // 
+            WinsLabel.AutoSize = true;
+            WinsLabel.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            WinsLabel.Location = new Point(434, 234);
+            WinsLabel.Name = "WinsLabel";
+            WinsLabel.Size = new Size(154, 30);
+            WinsLabel.TabIndex = 19;
+            WinsLabel.Text = "Ваши победы:";
+            // 
+            // CompWinsLabel
+            // 
+            CompWinsLabel.AutoSize = true;
+            CompWinsLabel.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            CompWinsLabel.Location = new Point(434, 279);
+            CompWinsLabel.Name = "CompWinsLabel";
+            CompWinsLabel.Size = new Size(135, 30);
+            CompWinsLabel.TabIndex = 20;
+            CompWinsLabel.Text = "Победы ИИ:";
+            // 
             // tictactoeForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(718, 585);
+            Controls.Add(CompWinsLabel);
+            Controls.Add(WinsLabel);
             Controls.Add(startbut);
             Controls.Add(restBut);
             Controls.Add(LableMoves);
@@ -289,6 +313,7 @@
             Name = "tictactoeForm";
             Tag = "Play1";
             Text = "Крестики нолики";
+            FormClosed += tictactoeForm_FormClosed;
             Load += Form1_Load;
             Click += ButtonClick;
             ResumeLayout(false);
@@ -315,5 +340,7 @@
         private Label LableMoves;
         private Button restBut;
         private Button startbut;
+        private Label WinsLabel;
+        private Label CompWinsLabel;
     }
 }
