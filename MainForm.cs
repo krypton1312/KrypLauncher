@@ -22,8 +22,8 @@ namespace KrypLauncher
 
         private void pictureBox2048_Click(object sender, EventArgs e)
         {
-            Options2048Form options2048Form = new Options2048Form();
-            Main2048Form main2048Form = new Main2048Form(loginUser);
+            int matrixRows = 4; int matrixCells= 4; Size tileSize= new Size(60, 60); int Int32ervalBetweenTiles =10; int borderInt32erval = 10 ; Color backColor =Color.Black;
+            Options2048Form options2048Form = new Options2048Form( matrixRows, matrixCells, tileSize, Int32ervalBetweenTiles, borderInt32erval, backColor, loginUser);
             this.Hide();
             options2048Form.Show();
 

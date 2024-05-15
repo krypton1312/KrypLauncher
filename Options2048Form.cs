@@ -11,14 +11,10 @@ namespace KrypLauncher
         private bool options = false;
         private Main2048Form mf;
         string loginUser;
-        public Options2048Form()
+        public Options2048Form(int matrixRows, int matrixCells, Size tileSize, int Int32ervalBetweenTiles, int borderInt32erval, Color backColor, string loginUser)
         {
             InitializeComponent();
-        }
-        public Options2048Form(int matrixRows, int matrixCells, Size tileSize, int Int32ervalBetweenTiles, int borderInt32erval, Color backColor)
-        {
-            InitializeComponent();
-
+            this.loginUser = loginUser; 
             nudRows.Value = matrixRows;
             nudCells.Value = matrixCells;
             nudTileSize.Value = tileSize.Width;
@@ -80,7 +76,7 @@ namespace KrypLauncher
             int Int32erval = Convert.ToInt32(nudInterval1.Value);
 
             if (mf != null) mf.Close();
-            mf = new Main2048Form(rows, cells, tileSize, Int32erval, borderInt32erval, cbEllipse.Checked, Color.Silver);
+            mf = new Main2048Form(rows, cells, tileSize, Int32erval, borderInt32erval, cbEllipse.Checked, Color.Silver, loginUser);
             Hide();
             mf.Show();
             mf.OptionsEvent += OnOptions;

@@ -10,18 +10,16 @@ using System.IO;
 using System.Threading;
 using G_2048 = Game_2048._2048;
 using MySql.Data.MySqlClient;
+using Microsoft.VisualBasic.Logging;
 
 namespace KrypLauncher
 {
     public delegate void OptionsEventHandler();
-  
-
     public partial class Main2048Form : Form
     {
-        DB db = new DB();   
+        DB db = new DB();
+        private string loginUser;
         public event OptionsEventHandler OptionsEvent;
-
-        string loginUser;
         private int score;                        // Очки
         private int bestScore;                    // Рекорд
         private int minValue = 2;                 // Минимально выпадающий блок
@@ -41,12 +39,9 @@ namespace KrypLauncher
         private Dictionary<int, Color> colors;    // Цвета плиток
         Dictionary<string, int> records = new Dictionary<string, int>();        // Рекорды для каждого размера поля
 
-        public Main2048Form()
+        public Main2048Form(int _matrixRows, int _matrixCells, Size _tileSize, int _Int32ervalBetweenTiles, int _borderInt32erval, bool _ellipseTile, Color backColor, string loginUser)
         {
-            InitializeComponent();
-        }
-        public Main2048Form(int _matrixRows, int _matrixCells, Size _tileSize, int _Int32ervalBetweenTiles, int _borderInt32erval, bool _ellipseTile, Color backColor)
-        {
+            this.loginUser = loginUser;
             if (_matrixRows < 2 || _matrixCells < 2 || _tileSize.Width < 1 || _tileSize.Height < 1 || _Int32ervalBetweenTiles < 0 || _borderInt32erval < 0)
                 return;
             matrixRows = _matrixRows;
@@ -386,14 +381,8 @@ namespace KrypLauncher
                 // Открываем соединение с базой данных
                 db.openConnection();
 
-                // Создаем SQL-запрос для выбора записи из таблицы scores
-                string selectQuery = "SELECT `twentyfor` FROM `users` WHERE `login` = @loginUser";
-
-                // Создаем команду для выполнения запроса
-                MySqlCommand command = new MySqlCommand(selectQuery, db.getConnection());
+                MySqlCommand command = new MySqlCommand("SELECT `twentyfor` FROM `users` WHERE `login` = @loginUser", db.getConnection());
                 command.Parameters.AddWithValue("@loginUser", loginUser);
-
-                // Выполняем запрос и получаем результат
                 object result = command.ExecuteScalar();
 
                 // Проверяем, получили ли мы результат
@@ -426,12 +415,8 @@ namespace KrypLauncher
                 // Открываем соединение с базой данных
                 db.openConnection();
 
-                // Создаем SQL-запрос для обновления или вставки записи в таблицу scores
-                string updateQuery = "INSERT INTO `users` (login, twentyfor) VALUES (@loginUser, @bestScore) " +
-                                    "ON DUPLICATE KEY UPDATE `twentyfor` = @bestScore";
-
                 // Создаем команду для выполнения запроса
-                MySqlCommand command = new MySqlCommand(updateQuery, db.getConnection());
+                MySqlCommand command = new MySqlCommand("UPDATE `users` SET `twentyfor` = @bestScore WHERE `login` = @loginUser", db.getConnection());
                 command.Parameters.AddWithValue("@loginUser", loginUser);
                 command.Parameters.AddWithValue("@bestScore", bestScore);
 
@@ -613,6 +598,7 @@ F12 – скинути всі рекорди.", "2048", MessageBoxButtons.OK, Me
 
         private void bClose_Click(object sender, EventArgs e)
         {
+            WriteRecords();
             this.Hide();
             MainForm mainform = new MainForm(loginUser);
             mainform.Show();

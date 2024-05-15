@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace KrypLauncher
 {
     internal class DB
-    { 
+    {
         MySqlConnection connection = new MySqlConnection("server=localhost;port=3306;username=root;password=root;database=kryplauncher");
         public void openConnection()
         {
