@@ -19,6 +19,10 @@ namespace KrypLauncher
     {
         DB db = new DB();
         private string loginUser;
+        string cheater;
+        string gameover;
+        string infoBox;
+
         public event OptionsEventHandler OptionsEvent;
         private int score;                        // Очки
         private int bestScore;                    // Рекорд
@@ -38,6 +42,11 @@ namespace KrypLauncher
         private Size normalFormSize = new Size(323, 466);
         private Dictionary<int, Color> colors;    // Цвета плиток
         Dictionary<string, int> records = new Dictionary<string, int>();        // Рекорды для каждого размера поля
+        private string wanna_leave;
+        private string resent_current;
+        private string reseted;
+        private string resetall;
+        private string allreseted;
 
         public Main2048Form(int _matrixRows, int _matrixCells, Size _tileSize, int _Int32ervalBetweenTiles, int _borderInt32erval, bool _ellipseTile, Color backColor, string loginUser)
         {
@@ -50,7 +59,7 @@ namespace KrypLauncher
             borderInterval = _borderInt32erval;
             ellipseTile = _ellipseTile;
             tileSize = new Size(_tileSize.Width, _tileSize.Height);
-
+            chooselang();
             InitializeComponent();
             BackColor = backColor;
             /*Подгон размеров всех элементов*/
@@ -224,12 +233,12 @@ namespace KrypLauncher
 
         private void EndGameHandler()
         {
-            MessageBox.Show("Game Over!", "\"2048\"");
+            MessageBox.Show(gameover, "\"2048\"");
             gameOver = true;
         }
         private void ScoreOverflowHandler()
         {
-            MessageBox.Show("Вітаю. Ви перевищили межу допустимого значення очок. Ви задрот чи читер.", "2048");
+            MessageBox.Show(cheater, "2048");
             gameOver = true;
             records[matrixRows + " " + matrixCells] = -1;
             bestScore = -1;
@@ -378,25 +387,19 @@ namespace KrypLauncher
         {
             try
             {
-                // Открываем соединение с базой данных
                 db.openConnection();
-
                 MySqlCommand command = new MySqlCommand("SELECT `twentyfor` FROM `users` WHERE `login` = @loginUser", db.getConnection());
                 command.Parameters.AddWithValue("@loginUser", loginUser);
                 object result = command.ExecuteScalar();
-
-                // Проверяем, получили ли мы результат
                 if (result != null)
                 {
-                    // Преобразуем результат в строку и парсим его в целое число
                     bestScore = Convert.ToInt32(result);
                 }
                 else
                 {
-                    // Если результат пустой, устанавливаем лучший счет в 0
-                    bestScore = 5;
+                    bestScore = 0;
                 }
-                ShowBestScore(); // Обновляем отображение лучшего счета
+                ShowBestScore();
             }
             catch (Exception ex)
             {
@@ -404,7 +407,6 @@ namespace KrypLauncher
             }
             finally
             {
-                // В любом случае закрываем соединение с базой данных
                 db.closeConnection();
             }
         }
@@ -412,15 +414,10 @@ namespace KrypLauncher
         {
             try
             {
-                // Открываем соединение с базой данных
                 db.openConnection();
-
-                // Создаем команду для выполнения запроса
                 MySqlCommand command = new MySqlCommand("UPDATE `users` SET `twentyfor` = @bestScore WHERE `login` = @loginUser", db.getConnection());
                 command.Parameters.AddWithValue("@loginUser", loginUser);
                 command.Parameters.AddWithValue("@bestScore", bestScore);
-
-                // Выполняем запрос
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -429,7 +426,6 @@ namespace KrypLauncher
             }
             finally
             {
-                // В любом случае закрываем соединение с базой данных
                 db.closeConnection();
             }
         }
@@ -496,17 +492,12 @@ namespace KrypLauncher
             }
             else if (e.KeyData == Keys.F1)
             {
-                MessageBox.Show(@"
-Гарячі клавіші:
-F1 – допомога;
-Ecs – вихід;
-F11 – скинути поточний рекорд;
-F12 – скинути всі рекорди.", "2048", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(infoBox, "2048", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             else if (e.KeyData == Keys.Escape)
             {
-                var result = MessageBox.Show("Ви справді хочете вийти? Поточний рекорд не збережеться.", "2048", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var result = MessageBox.Show(wanna_leave, "2048", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
                     this.Hide();
@@ -516,22 +507,22 @@ F12 – скинути всі рекорди.", "2048", MessageBoxButtons.OK, Me
             }
             else if (e.KeyData == Keys.F11)
             {
-                var result = MessageBox.Show("Обнулити поточний рекорд?", "2048", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var result = MessageBox.Show(resent_current, "2048", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
                     ResetCurrentRecord();
-                    MessageBox.Show("Рекорд скинутий", "2048");
+                    MessageBox.Show(reseted, "2048");
                     ShowBestScore();
                 }
                 return;
             }
             else if (e.KeyData == Keys.F12)
             {
-                var result = MessageBox.Show("Обнулити всі рекорди?", "2048", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var result = MessageBox.Show(resetall, "2048", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
                     ResetAllScores();
-                    MessageBox.Show("Усі рекорди скинуто", "2048");
+                    MessageBox.Show(allreseted, "2048");
                     ShowBestScore();
                 }
                 return;
@@ -595,7 +586,53 @@ F12 – скинути всі рекорди.", "2048", MessageBoxButtons.OK, Me
         {
 
         }
-
+        void chooselang()
+        {
+            switch (LangChoose.langindex)
+            {
+                case 1:
+                    cheater = "Поздравляю. Вы превысили лимит по очкам. Вы - обманщик или читер.";
+                    gameover = "Конец игры!";
+                    infoBox = "Горячие клавиши:\r\nF1 - помощь;\r\nEsc - выход;\r\nF11 - сбросить текущий рекорд;\r\nF12 - сбросить все рекорды.";
+                    wanna_leave = "Вы уверены, что хотите выйти? Текущая запись не сохранится.";
+                    resent_current = "Сбросить текущий рекорд?";
+                    reseted = "Рекорд сброшен.";
+                    resetall = "Сбросить все рекорды?";
+                    allreseted = "Все рекорды сброшены.";
+                    break;
+                case 2:
+                    bUndo.Text = "Скасувати";
+                    cheater = "Вітаю. Ви перевищили ліміт очок. Ви - шахраїн або чітер.";
+                    gameover = "Гра закінчена!";
+                    infoBox = "Гарячі клавіші:\r\nF1 - допомога;\r\nEsc - вихід;\r\nF11 - скинути поточний рекорд;\r\nF12 - скинути всі рекорди.";
+                    wanna_leave = "Ви впевнені, що хочете вийти? Поточний рекорд не буде збережений.";
+                    resent_current = "Скинути поточний рекорд?";
+                    reseted = "Рекорд скинутий.";
+                    resetall = "Скинути всі рекорди?";
+                    allreseted = "Скинуті всі рекорди.";
+                    break;
+                case 3:
+                    cheater = "Congratulations. You've exceeded your points limit. You're a cheater or a cheater.";
+                    gameover = "Game Over!";
+                    infoBox = "Hotkeys:\r\nF1 - help;\r\nEsc - exit;\r\nF11 - reset current record;\r\nF12 - reset all records.";
+                    wanna_leave = "Are you sure you want to quit? The current record won't hold.";
+                    resent_current = "Reset current record?";
+                    reseted = "Record reset.";
+                    resetall = "Reset all records?";
+                    allreseted = "Reset all records?";
+                    break;
+                case 4:
+                    cheater = "Felicidades. Has superado tu límite de puntos. Eres un tramposo o un hacker.";
+                    gameover = "¡Juego terminado!";
+                    infoBox = "Teclas de acceso rápido:\r\nF1 - ayuda;\r\nEsc - salir;\r\nF11 - restablecer el registro actual;\r\nF12 - restablecer todos los registros.";
+                    wanna_leave = "¿Estás seguro de que quieres salir? El récord actual no se mantendrá.";
+                    resent_current = "¿Restablecer el registro actual?";
+                    reseted = "Registro restablecido.";
+                    resetall = "¿Restablecer todos los registros?";
+                    allreseted = "Todos los registros restablecidos.";
+                    break;
+            }
+        }
         private void bClose_Click(object sender, EventArgs e)
         {
             WriteRecords();
@@ -604,8 +641,6 @@ F12 – скинути всі рекорди.", "2048", MessageBoxButtons.OK, Me
             mainform.Show();
         }
     }
-
-    /*Кнопка, не получающая фокус.*/
     class NonFocusButton : Button
     {
         public NonFocusButton() => SetStyle(ControlStyles.Selectable, false);

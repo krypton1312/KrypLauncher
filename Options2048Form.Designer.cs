@@ -238,9 +238,9 @@
             lInt32erval1.Location = new Point(57, 20);
             lInt32erval1.Margin = new Padding(4, 0, 4, 0);
             lInt32erval1.Name = "lInt32erval1";
-            lInt32erval1.Size = new Size(149, 15);
+            lInt32erval1.Size = new Size(156, 15);
             lInt32erval1.TabIndex = 7;
-            lInt32erval1.Text = "Інтервал між клітинами:";
+            lInt32erval1.Text = "Інтерваaл між клітинами:";
             // 
             // cbEllipse
             // 
@@ -249,9 +249,9 @@
             cbEllipse.Location = new Point(231, 332);
             cbEllipse.Margin = new Padding(4, 3, 4, 3);
             cbEllipse.Name = "cbEllipse";
-            cbEllipse.Size = new Size(140, 25);
+            cbEllipse.Size = new Size(149, 25);
             cbEllipse.TabIndex = 12;
-            cbEllipse.Text = "Круглі плитки";
+            cbEllipse.Text = "Круглі плитaки";
             cbEllipse.UseVisualStyleBackColor = true;
             // 
             // bInfo

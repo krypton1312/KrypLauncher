@@ -33,6 +33,7 @@
             PasswordTextBox = new TextBox();
             GeneragePasswordLabel = new LinkLabel();
             LoginButton = new Button();
+            LangBox = new ComboBox();
             SuspendLayout();
             // 
             // AuthLabel
@@ -69,10 +70,10 @@
             GeneragePasswordLabel.AutoSize = true;
             GeneragePasswordLabel.Location = new Point(129, 115);
             GeneragePasswordLabel.Name = "GeneragePasswordLabel";
-            GeneragePasswordLabel.Size = new Size(133, 15);
+            GeneragePasswordLabel.Size = new Size(139, 15);
             GeneragePasswordLabel.TabIndex = 3;
             GeneragePasswordLabel.TabStop = true;
-            GeneragePasswordLabel.Text = "Сгенерировать пароль";
+            GeneragePasswordLabel.Text = "Сгенериaровать пароль";
             GeneragePasswordLabel.LinkClicked += GeneragePasswordLabel_LinkClicked;
             // 
             // LoginButton
@@ -85,11 +86,22 @@
             LoginButton.UseVisualStyleBackColor = true;
             LoginButton.Click += LoginButton_Click;
             // 
+            // LangBox
+            // 
+            LangBox.FormattingEnabled = true;
+            LangBox.Items.AddRange(new object[] { "Русский ", "Українська", "English", "Espanol" });
+            LangBox.Location = new Point(297, 18);
+            LangBox.Name = "LangBox";
+            LangBox.Size = new Size(111, 23);
+            LangBox.TabIndex = 2;
+            LangBox.SelectedIndexChanged += LangBox_SelectedIndexChanged;
+            // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(384, 211);
+            ClientSize = new Size(420, 211);
+            Controls.Add(LangBox);
             Controls.Add(LoginButton);
             Controls.Add(GeneragePasswordLabel);
             Controls.Add(PasswordTextBox);
@@ -108,5 +120,7 @@
         private TextBox PasswordTextBox;
         private LinkLabel GeneragePasswordLabel;
         private Button LoginButton;
+        public ComboBox LangBox;
+        private ComboBox comboBox1;
     }
 }

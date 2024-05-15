@@ -20,9 +20,9 @@ namespace KrypLauncher
         private string FinalPassword;
         public GenPasswordForm()
         {
+            LangChoose langChoose = new();
             InitializeComponent();
-            LangComboBox.SelectedIndex = 0;
-            LangComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            changelang();
             radioButton2.Checked = true;
             label2.Visible = false;
             radioButton3.Visible = false;
@@ -31,10 +31,11 @@ namespace KrypLauncher
             groupBox2.Visible = false;
             generateBut.Click += generateBut_Click;
         }
-        private void LangComboBox_SelectedIndexChanged(object sender, EventArgs e)
+
+        void changelang()
         {
-            int langindext = LangComboBox.SelectedIndex + 1;
-            switch (langindext)
+            int langindex = LangChoose.langindex;
+            switch (langindex)
             {
                 case 1:
                     {
@@ -103,6 +104,7 @@ namespace KrypLauncher
 
                         break;
                     }
+
             }
         }
 
@@ -134,8 +136,7 @@ namespace KrypLauncher
             }
             if (checkall < 1)
             {
-                int langindext = LangComboBox.SelectedIndex + 1;
-                switch (langindext)
+                switch (LangChoose.langindex)
                 {
                     case 1:
                         {

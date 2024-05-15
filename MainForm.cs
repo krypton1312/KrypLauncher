@@ -17,6 +17,7 @@ namespace KrypLauncher
         public MainForm(string loginUser)
         {
             InitializeComponent();
+            changelang();
             this.loginUser = loginUser;
         }
 
@@ -33,6 +34,27 @@ namespace KrypLauncher
             tictactoeForm TictactoeForm = new tictactoeForm(loginUser);
             this.Hide();
             TictactoeForm.Show();
+        }
+        void changelang()
+        {
+            int index = LangChoose.langindex;
+            switch(index)
+            {
+                case 1:
+                    chooseLabel.Text = "Выберите игру, в которую вы бы хотели поиграть:";
+                    break;
+                case 2:
+                    chooseLabel.Text = "Виберіть гру, в яку ви хотіли б пограти:";
+                    break;
+                case 3:
+                    chooseLabel.Text = "Select the game you would like to play:";
+                    break;
+                case 4:
+                    chooseLabel.Text = "Selecciona el juego que te gustaría jugar:";
+                    break;
+
+
+            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)

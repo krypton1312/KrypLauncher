@@ -12,12 +12,21 @@ namespace KrypLauncher
     public partial class tictactoeForm : Form
     {
         private string loginUser;
+        String winlabel;
+        String loselabel;
+        string message;
+        string caption;
+        string gameover;
+        string youwon;
+        string youlose;
+        string steps;
         public tictactoeForm(string loginUser)
         {
+            chooselang();
             InitializeComponent();
             this.loginUser = loginUser;
-            WinsLabel.Text = "Ваши победы: " + resultUpdate(3);
-            CompWinsLabel.Text = "Победы ИИ: " + resultUpdate(4);
+            WinsLabel.Text = @"wanlabel" + resultUpdate(3);
+            CompWinsLabel.Text = @"loselabel" + resultUpdate(4);
         }
         Player currentPlayer;
         public enum Player
@@ -31,9 +40,6 @@ namespace KrypLauncher
         }
         void Start()
         {
-            const string message = "Вы желаете сделать первый ход?";
-            const string caption = "Выбор хода";
-
             DialogResult dialogresult = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogresult == DialogResult.No)
             {
@@ -54,23 +60,23 @@ namespace KrypLauncher
                 case 1:
                     int tictactoeWinsCount = Convert.ToInt32(getwins.ExecuteScalar());
                     tictactoeWinsCount++;
-                    WinsLabel.Text = "Ваши победы: " + tictactoeWinsCount;
+                    WinsLabel.Text = winlabel + tictactoeWinsCount;
                     MySqlCommand updatewins = new MySqlCommand("UPDATE `users` SET `tictactoewins` = @newValue WHERE `login` = @uL", db.getConnection());
                     updatewins.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
                     updatewins.Parameters.AddWithValue("@newValue", tictactoeWinsCount);
                     updatewins.ExecuteNonQuery();
-                    MessageBox.Show("Вы выиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                    MessageBox.Show(youwon, gameover, MessageBoxButtons.OK);
                     db.closeConnection();
                     return tictactoeWinsCount;
                 case 2:
                     int tictactoeLoseCount = Convert.ToInt32(getlose.ExecuteScalar());
                     tictactoeLoseCount++;
-                    CompWinsLabel.Text = "Победы ИИ: " + tictactoeLoseCount;
+                    CompWinsLabel.Text = loselabel + tictactoeLoseCount;
                     MySqlCommand updatelose = new MySqlCommand("UPDATE `users` SET `tictactoelose` = @newValue WHERE `login` = @uL", db.getConnection());
                     updatelose.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
                     updatelose.Parameters.AddWithValue("@newValue", tictactoeLoseCount);
                     updatelose.ExecuteNonQuery();
-                    MessageBox.Show("Вы проиграли.", "Игра окончена.", MessageBoxButtons.OK);
+                    MessageBox.Show(youlose, gameover, MessageBoxButtons.OK);
                     db.closeConnection();
                     return tictactoeLoseCount;
                 case 3:
@@ -126,7 +132,7 @@ namespace KrypLauncher
                 button.Enabled = false;
                 moves++;
                 CheckMoves(moves);
-                LableMoves.Text = ("Количество ходов: " + Convert.ToString(moves));
+                LableMoves.Text = (steps + Convert.ToString(moves));
                 if (!CheckWin_USER()) return;
                 playAI(moves); CheckMoves(moves); CheckWin_AI();
                 Console.WriteLine(moves);
@@ -1946,6 +1952,65 @@ namespace KrypLauncher
                 }
             }
             Start();
+        }
+        void chooselang()
+        {
+            switch(LangChoose.langindex)
+            {
+                case 1:
+                    this.Text = "Крестики нолики";
+                    startbut.Text = "Начать";
+                    restBut.Text = "Перезапустить";
+                    loselabel = "Победы ИИ: ";
+                    winlabel = "Ваши победы: ";
+                    message = "Вы желаете сделать первый ход?";
+                    caption = "Выбор хода";
+                    gameover = "Игра окончена.";
+                    youwon = "Вы выиграли.";
+                    youlose = "Вы проиграли.";
+                    steps = "Количество ходов: ";
+                    break;
+                case 2:
+                    this.Text = "Хрестики-нулики";
+                    startbut.Text = "Почати";
+                    restBut.Text = "Перезапустити";
+                    loselabel = "Перемоги ШІ: ";
+                    winlabel = "Ваші перемоги: ";
+                    message = "Бажаєте зробити перший хід?";
+                    caption = "Вибір ходу";
+                    gameover = "Гра завершена.";
+                    youwon = "Ви виграли.";
+                    youlose = "Ви програли.";
+                    steps = "Кількість ходів: ";
+
+                    break;
+                case 3:
+                    this.Text = "Tic Tac Toe";
+                    startbut.Text = "Start";
+                    restBut.Text = "Restart";
+                    loselabel = "AI Wins: ";
+                    winlabel = "Your Wins: ";
+                    message = "Do you want to make the first move?";
+                    caption = "Move Selection";
+                    gameover = "Game over.";
+                    youwon = "You won.";
+                    youlose = "You lose.";
+                    steps = "Number of steps: ";
+                    break;
+                case 4:
+                    this.Text = "Tres en raya";
+                    startbut.Text = "Comenzar";
+                    restBut.Text = "Reiniciar";
+                    loselabel = "Victorias de IA: ";
+                    winlabel = "Tus victorias: ";
+                    message = "¿Quieres hacer el primer movimiento?";
+                    caption = "Selección de movimiento";
+                    gameover = "Juego terminado.";
+                    youwon = "Ganaste.";
+                    youlose = "Perdiste.";
+                    steps = "Número de pasos: ";
+                    break;
+            }
         }
 
         private void tictactoeForm_FormClosed(object sender, FormClosedEventArgs e)

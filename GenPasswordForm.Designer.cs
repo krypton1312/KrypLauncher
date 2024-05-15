@@ -30,7 +30,6 @@
         {
             outTextBox = new TextBox();
             generateBut = new Button();
-            LangComboBox = new ComboBox();
             NumbersBox = new CheckBox();
             TextLittleBox = new CheckBox();
             TextBigBox = new CheckBox();
@@ -69,16 +68,6 @@
             generateBut.Text = "Сгенерировать пароль";
             generateBut.UseVisualStyleBackColor = true;
             generateBut.Click += generateBut_Click;
-            // 
-            // LangComboBox
-            // 
-            LangComboBox.FormattingEnabled = true;
-            LangComboBox.Items.AddRange(new object[] { "Русский ", "Українська", "English", "Espanol" });
-            LangComboBox.Location = new Point(361, 12);
-            LangComboBox.Name = "LangComboBox";
-            LangComboBox.Size = new Size(111, 23);
-            LangComboBox.TabIndex = 2;
-            LangComboBox.SelectedIndexChanged += LangComboBox_SelectedIndexChanged;
             // 
             // NumbersBox
             // 
@@ -249,7 +238,6 @@
             Controls.Add(TextBigBox);
             Controls.Add(TextLittleBox);
             Controls.Add(NumbersBox);
-            Controls.Add(LangComboBox);
             Controls.Add(generateBut);
             Controls.Add(outTextBox);
             Name = "GenPasswordForm";
@@ -267,7 +255,6 @@
 
         private TextBox outTextBox;
         private Button generateBut;
-        private ComboBox LangComboBox;
         private CheckBox NumbersBox;
         private CheckBox TextLittleBox;
         private CheckBox TextBigBox;
