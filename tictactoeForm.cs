@@ -22,11 +22,8 @@ namespace KrypLauncher
         string steps;
         public tictactoeForm(string loginUser)
         {
-            chooselang();
             InitializeComponent();
             this.loginUser = loginUser;
-            WinsLabel.Text = @"wanlabel" + resultUpdate(3);
-            CompWinsLabel.Text = @"loselabel" + resultUpdate(4);
         }
         Player currentPlayer;
         public enum Player
@@ -37,6 +34,9 @@ namespace KrypLauncher
         public void Form1_Load(object sender, EventArgs e)
         {
             Default();
+            chooselang();
+            WinsLabel.Text = winlabel + resultUpdate(3);
+            CompWinsLabel.Text = loselabel + resultUpdate(4);
         }
         void Start()
         {

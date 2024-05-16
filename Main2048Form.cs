@@ -22,7 +22,8 @@ namespace KrypLauncher
         string cheater;
         string gameover;
         string infoBox;
-
+        string bbest;
+        string best;
         public event OptionsEventHandler OptionsEvent;
         private int score;                        // Очки
         private int bestScore;                    // Рекорд
@@ -59,7 +60,6 @@ namespace KrypLauncher
             borderInterval = _borderInt32erval;
             ellipseTile = _ellipseTile;
             tileSize = new Size(_tileSize.Width, _tileSize.Height);
-            chooselang();
             InitializeComponent();
             BackColor = backColor;
             /*Подгон размеров всех элементов*/
@@ -206,14 +206,14 @@ namespace KrypLauncher
             if (score == -1)
                 bScore.Text = "Score:\n∞";
             else
-                bScore.Text = "Score:\n" + score;
+                bScore.Text = best + score;
         }
         private void ShowBestScore()
         {
             if (bestScore == -1)
                 bBest.Text = "Best:\n∞";
             else
-                bBest.Text = "Best:\n" + bestScore;
+                bBest.Text = bbest + bestScore;
         }
 
         private void NewGame()
@@ -480,6 +480,7 @@ namespace KrypLauncher
 
         private void Main2048Form_Load(object sender, EventArgs e)
         {
+            chooselang();
             ReadColors();
             ReadRecords();
         }
@@ -591,6 +592,12 @@ namespace KrypLauncher
             switch (LangChoose.langindex)
             {
                 case 1:
+                    bScore.Text = "Очки:";
+                    bOptions.Text = "Настройки";
+                    bBest.Text = "Лучший:";
+                    bUndo.Text = "Отменить";
+                    best = "Очки:\n";
+                    bbest = "Лучший:\n";
                     cheater = "Поздравляю. Вы превысили лимит по очкам. Вы - обманщик или читер.";
                     gameover = "Конец игры!";
                     infoBox = "Горячие клавиши:\r\nF1 - помощь;\r\nEsc - выход;\r\nF11 - сбросить текущий рекорд;\r\nF12 - сбросить все рекорды.";
@@ -601,7 +608,13 @@ namespace KrypLauncher
                     allreseted = "Все рекорды сброшены.";
                     break;
                 case 2:
+                    bScore.Text = "Очки:";
+                    bOptions.Text = "Опції";
+                    bBest.Text = "Найкращий:";
                     bUndo.Text = "Скасувати";
+                    bUndo.Text = "Скасувати";
+                    best = "Очки:\n";
+                    bbest = "Найкращий:\n";
                     cheater = "Вітаю. Ви перевищили ліміт очок. Ви - шахраїн або чітер.";
                     gameover = "Гра закінчена!";
                     infoBox = "Гарячі клавіші:\r\nF1 - допомога;\r\nEsc - вихід;\r\nF11 - скинути поточний рекорд;\r\nF12 - скинути всі рекорди.";
@@ -611,7 +624,15 @@ namespace KrypLauncher
                     resetall = "Скинути всі рекорди?";
                     allreseted = "Скинуті всі рекорди.";
                     break;
+
                 case 3:
+                    bScore.Text = "Score:";
+                    bOptions.Text = "Options";
+                    bBest.Text = "Best:";
+                    bUndo.Text = "Undo";
+                    bUndo.Text = "Undo";
+                    best = "Score:\n";
+                    bbest = "Best:\n";
                     cheater = "Congratulations. You've exceeded your points limit. You're a cheater or a cheater.";
                     gameover = "Game Over!";
                     infoBox = "Hotkeys:\r\nF1 - help;\r\nEsc - exit;\r\nF11 - reset current record;\r\nF12 - reset all records.";
@@ -622,6 +643,12 @@ namespace KrypLauncher
                     allreseted = "Reset all records?";
                     break;
                 case 4:
+                    bScore.Text = "Puntuación:";
+                    bOptions.Text = "Opciones";
+                    bBest.Text = "Mejor:";
+                    bbest = "Mejor:\n";
+                    best = "Puntuación:\n";
+                    bUndo.Text = "Deshacer";
                     cheater = "Felicidades. Has superado tu límite de puntos. Eres un tramposo o un hacker.";
                     gameover = "¡Juego terminado!";
                     infoBox = "Teclas de acceso rápido:\r\nF1 - ayuda;\r\nEsc - salir;\r\nF11 - restablecer el registro actual;\r\nF12 - restablecer todos los registros.";
