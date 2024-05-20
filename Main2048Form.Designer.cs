@@ -202,7 +202,6 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "Main2048Form";
-            ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "\"2048\"";
             FormClosing += Main2048Form_FormClosing;

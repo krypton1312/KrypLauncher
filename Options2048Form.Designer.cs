@@ -30,6 +30,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Options2048Form));
             bOK = new Button();
             lMatrixSize = new Label();
             nudRows = new NumericUpDown();
@@ -299,11 +300,11 @@
             Controls.Add(panel1);
             Controls.Add(bOK);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "Options2048Form";
-            ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Настройки";
             FormClosing += StartForm_FormClosing;
