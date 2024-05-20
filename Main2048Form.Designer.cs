@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main2048Form));
             pMenu = new Panel();
             bClose = new NonFocusButton();
             bUndo = new NonFocusButton();
@@ -196,6 +197,7 @@
             Controls.Add(pField);
             Controls.Add(pMenu);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
             MinimizeBox = false;
